@@ -7,6 +7,7 @@ import br.com.tiagosouzagarcia.screenmatch.service.ConsumoAPI;
 import br.com.tiagosouzagarcia.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class Principal {
 
 
     public void exibeMenu() {
-        System.out.println("Digite o nome da série para busca");
+       /* System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
         var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
         DadosSerie dados = converteDados.obterDados(json, DadosSerie.class);
@@ -37,7 +38,7 @@ public class Principal {
         temporadas.forEach(System.out::println);
         //Equivale a temporadas.forEach(t -> System.out.println(t);
 
-        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));*/
 
         /*
         * Igual ao Lambda
@@ -48,6 +49,25 @@ public class Principal {
             }
         }
          */
+
+        List<String> nomes = Arrays.asList("Jacque", "Iasmin", "Paulo", "Rodrigo", "Nico");
+
+        nomes.stream().sorted().forEach(System.out::println);
+
+        nomes.stream()
+                .sorted()
+                .limit(3)
+                .filter(n -> n.startsWith("N"))
+                .forEach(System.out::println);
+
+        nomes.stream()
+                .sorted()
+                .limit(3)
+                .filter(n -> n.startsWith("N"))
+                .map(n -> n.toUpperCase())
+                .forEach(System.out::println);
+
+        nomes.stream().sorted().limit(3).filter(n -> n.startsWith("N")).map(n -> n.toUpperCase()).forEach(System.out::println);
 
 
     }
