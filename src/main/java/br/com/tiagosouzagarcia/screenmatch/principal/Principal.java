@@ -4,12 +4,12 @@ package br.com.tiagosouzagarcia.screenmatch.principal;
 import br.com.tiagosouzagarcia.screenmatch.model.DadosSerie;
 import br.com.tiagosouzagarcia.screenmatch.model.DadosTemporada;
 import br.com.tiagosouzagarcia.screenmatch.model.Serie;
+import br.com.tiagosouzagarcia.screenmatch.repository.SerieRepository;
 import br.com.tiagosouzagarcia.screenmatch.service.ConsumoAPI;
 import br.com.tiagosouzagarcia.screenmatch.service.ConverteDados;
-import br.com.tiagosouzagarcia.screenmatch.util.ApiKeyLoader;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class Principal {
 
@@ -17,9 +17,16 @@ public class Principal {
     private ConsumoAPI consumo = new ConsumoAPI();
     private ConverteDados converteDados = new ConverteDados();
 
-    private String filePath = "F:\\WS\\ws-Alura\\alura-ws\\programacao\\java\\spring\\api_keys\\api_key.txt";
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=" + ApiKeyLoader.carregarChaveApi(filePath);
+    private final String API_KEY = "&apikey=" + System.getenv("APIKEY_OMDB");
+    private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+    private SerieRepository repository;
+
+    public Principal(SerieRepository repository) {
+        this.repository = repository;
+    }
+
     public void exibeMenu() {
         var opcao = -1;
         while (opcao != 0) {
@@ -55,11 +62,13 @@ public class Principal {
 
     }
 
-    private List<DadosSerie> dadosSeries = new ArrayList<>();
+
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        //dadosSeries.add(dados);
+        repository.save(serie);
         System.out.println(dados);
     }
 
@@ -67,8 +76,8 @@ public class Principal {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
         var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        DadosSerie dados = converteDados.obterDados(json, DadosSerie.class);
-        return dados;
+        DadosSerie dadosSerie = converteDados.obterDados(json, DadosSerie.class);
+        return dadosSerie;
     }
 
     private void buscarEpisodioPorSerie() {
@@ -84,10 +93,10 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream().map(d -> new Serie(d))
-                .collect(Collectors.toList());
-
+        List<Serie> series = repository.findAll();
+       /* series = dadosSeries.stream()
+                .map(d -> new Serie(d))
+                .collect(Collectors.toList());*/
         series.stream().sorted(Comparator.comparing(Serie::getGenero)).forEach(System.out::println);
     }
 }

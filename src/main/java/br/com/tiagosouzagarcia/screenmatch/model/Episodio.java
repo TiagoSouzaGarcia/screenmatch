@@ -1,7 +1,6 @@
 package br.com.tiagosouzagarcia.screenmatch.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Episodio {
     private Integer temporada;

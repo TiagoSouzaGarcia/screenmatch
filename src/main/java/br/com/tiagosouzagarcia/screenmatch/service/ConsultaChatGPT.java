@@ -8,8 +8,8 @@ import com.theokanning.openai.service.OpenAiService;
 public class ConsultaChatGPT {
 
     public static String obterTraducao(String texto) {
-        var filePath = "F:\\WS\\ws-Alura\\alura-ws\\programacao\\java\\spring\\api_keys\\api_key_openia.txt";
-       OpenAiService service = new OpenAiService(ApiKeyLoader.carregarChaveApi(filePath));
+
+       OpenAiService service = new OpenAiService(ApiKeyLoader.carregarChaveApi(System.getenv("APIKEY_OPENAI")));
 
         CompletionRequest requisicao = CompletionRequest.builder()
                 .model("gpt-3.5-turbo-instruct")
