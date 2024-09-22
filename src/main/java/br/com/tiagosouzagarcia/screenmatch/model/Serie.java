@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalDouble;
 
 @Entity
@@ -30,7 +31,7 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    @Transient
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie() {
@@ -47,7 +48,9 @@ public class Serie {
         //Traducao da sinopse usando a chatGPT
         //this.sinopse = ConsultaChatGPT.obterTraducao(dados.sinopse()).trim();
         //Traducao da sinopse usando a api MyMemory
-        this.sinopse = ConsultaMyMemory.obterTraducao(dados.sinopse()).trim();
+        /* String traducao = ConsultaMyMemory.obterTraducao(dados.sinopse());
+        this.sinopse = traducao != null ? traducao.trim() : "";*/
+        this.sinopse = Optional.ofNullable(ConsultaMyMemory.obterTraducao(dados.sinopse())).orElse("").trim();
     }
 
     public Long getId() {
@@ -63,6 +66,7 @@ public class Serie {
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
         this.episodios = episodios;
     }
 
@@ -128,8 +132,14 @@ public class Serie {
                 ", totalTemporadas=" + totalTemporadas +
                 ", avaliacao=" + avaliacao +
                 ", genero=" + genero +
+                "\n" +
                 ", atores='" + atores + '\'' +
+                "\n" +
                 ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\'';
+                "\n" +
+                ", sinopse='" + sinopse + '\'' +
+                "\n" +
+                ", episodios='" + episodios + '\'' +
+                "\n";
     }
 }
