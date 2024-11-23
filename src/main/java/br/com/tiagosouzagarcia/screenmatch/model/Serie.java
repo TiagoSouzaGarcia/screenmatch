@@ -133,13 +133,13 @@ public class Serie {
                 ", avaliacao=" + avaliacao +
                 ", genero=" + genero +
                 "\n" +
-                ", atores='" + atores + '\'' +
+                "atores='" + atores + '\'' +
                 "\n" +
-                ", poster='" + poster + '\'' +
+                "poster='" + poster + '\'' +
                 "\n" +
-                ", sinopse='" + sinopse + '\'' +
+                "sinopse='" + sinopse + '\'' +
                 "\n" +
-                ", episodios='" + episodios + '\'' +
+                "episodios='" + episodios + '\'' +
                 "\n";
     }
 }

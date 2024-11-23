@@ -1,25 +1,28 @@
 package br.com.tiagosouzagarcia.screenmatch.util;
 
 public enum Categoria {
-    ACAO("Action"),
-    AVENTURA("Adventure"),
-    ROMANCE("Romance"),
-    COMEDIA("Comedy"),
-    DRAMA("Drama"),
-    CRIME("Crime"),
-    TERROR("Terror"),
-    SUSPENSE("Suspense"),
-    CURTA("Short"),
-    HORROR("Horror"),
-    THRILLER("Thriller"),
-    ANIMACAO("Animation"),
-    OUTRA("Other");
+    ACAO("Action", "Ação"),
+    AVENTURA("Adventure", "Aventura"),
+    ROMANCE("Romance", "Romance"),
+    COMEDIA("Comedy", "Comédia"),
+    DRAMA("Drama", "Drama"),
+    CRIME("Crime", "Crime"),
+    TERROR("Terror", "Terror"),
+    SUSPENSE("Suspense", "Suspense"),
+    CURTA("Short", "Curta"),
+    HORROR("Horror", "Horror"),
+    THRILLER("Thriller", "Thriller"),
+    ANIMACAO("Animation", "Animação"),
+    OUTRA("Other", "Outro");
 
 
-    private final String categoriaOmdb;
+    private String categoriaOmdb;
 
-    Categoria(String categoriaOmdb){
+    private String categoriaPortugues;
+
+    Categoria(String categoriaOmdb, String categoriaPortugues){
         this.categoriaOmdb = categoriaOmdb;
+        this.categoriaPortugues = categoriaPortugues;
     }
 
     /**
@@ -33,6 +36,27 @@ public enum Categoria {
         try {
             for (Categoria categoria : Categoria.values()) {
                 if (categoria.categoriaOmdb.equalsIgnoreCase( text)) {
+                    return categoria;
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Nenhuma categoria encontrada para a string fornecida: " + text);
+            throw new InvalidCategoryException("Categoria inválida: " + text);
+        }
+        return Categoria.OUTRA;
+    }
+
+    /**
+     * Retorna a categoria correspondente à string fornecida em português.
+     *
+     * @param text A string que representa a categoria.
+     * @return A categoria correspondente.
+     * @throws IllegalArgumentException Se nenhuma categoria for encontrada para a string fornecida.
+     */
+    public static Categoria fromPortugues(String text) {
+        try {
+            for (Categoria categoria : Categoria.values()) {
+                if (categoria.categoriaPortugues.equalsIgnoreCase( text)) {
                     return categoria;
                 }
             }
